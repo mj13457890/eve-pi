@@ -1,23 +1,17 @@
-from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.chrome.service import Service
-import time
+import requests
 
-driver_path = 'chromedriver.exe'
-service = Service(driver_path)
-driver = webdriver.Chrome(service=service)
+API_KEY = 'G9KwKq3465588VPd6747t95Zh94q3W2E'
+API_URL = 'https://janice.e-351.com/api/rest/v1/pricer'
+MARKET = 2  # Jita
+ITEMS = ['water']  # 아이템 ID 또는 이름
 
-driver.get('https://janice.e-351.com/')
+payload = '\n'.join(ITEMS)
+params = {
+    'key': API_KEY,
+    'market': MARKET,
+    '_': '-'
+}
 
-input_box = driver.find_element(By.ID, 'pass')
-input_box.send_keys('123456')
-
-submit_button = driver.find_element(By.ID, 'submit')
-submit_button.click()
-
-time.sleep(2)
-
-output = driver.find_element(By.ID, 'result')
-print("결과:", output.text)
-
-driver.quit()
+response = requests.post(API_URL, params=params, data=payload, headers={'Content-Type': 'text/plain'})
+result = response.json()
+print(result)
